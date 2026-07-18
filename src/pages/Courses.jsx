@@ -2,11 +2,14 @@ import { Link } from 'react-router-dom'
 import { courses } from '../data/index.js'
 import { useAuth } from '../auth.jsx'
 import { useLang } from '../i18n.jsx'
+import { useNotes } from '../notes.jsx'
 
 const SUBJECTS = [
   { id: 'math', key: 'subjMath' },
   { id: 'science', key: 'subjScience' },
   { id: 'english', key: 'subjEnglish' },
+  { id: 'history', key: 'subjHistory' },
+  { id: 'language', key: 'subjLanguage' },
 ]
 
 function CourseCard({ course }) {
@@ -38,10 +41,14 @@ function CourseCard({ course }) {
 
 export default function Courses() {
   const { t } = useLang()
+  const { openNotebook } = useNotes()
   return (
     <div className="container">
       <div className="page-head">
-        <h1>{t('coursesTitle')}</h1>
+        <div className="page-head-row">
+          <h1>{t('coursesTitle')}</h1>
+          <button className="btn ghost" onClick={() => openNotebook()}>📓 {t('notebook')}</button>
+        </div>
         <p>{t('coursesSub')}</p>
       </div>
       {SUBJECTS.map(subj => {

@@ -1,7 +1,7 @@
 export default {
   id: 'physics',
-  title: 'Honors Physics',
-  titleZh: '荣誉物理',
+  title: 'Physics',
+  titleZh: '物理',
   subject: 'science',
   level: 'Honors',
   description: 'A first-principles tour of mechanics, waves, electricity, magnetism, and modern physics, built around problem solving with real numbers and units.',

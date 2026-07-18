@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import NavBar from './components/NavBar.jsx'
+import Notebook from './components/Notebook.jsx'
 import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
 import Courses from './pages/Courses.jsx'
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/course/:courseId/:unitId/:lessonId" element={<RequireLogin><Lesson /></RequireLogin>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Notebook />
     </>
   )
 }

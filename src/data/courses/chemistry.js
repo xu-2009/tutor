@@ -1,7 +1,7 @@
 export default {
   id: 'chemistry',
-  title: 'Honors Chemistry',
-  titleZh: '荣誉化学',
+  title: 'Chemistry',
+  titleZh: '化学',
   subject: 'science',
   level: 'Honors',
   description: 'A rigorous first-year chemistry course covering matter, atomic structure, bonding, reactions, stoichiometry, gases, solutions, acids and bases, thermochemistry, kinetics, equilibrium, and nuclear chemistry.',

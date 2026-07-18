@@ -1,7 +1,9 @@
+import { useState, useEffect, useRef } from 'react'
 import { Link, useParams, Navigate, useNavigate } from 'react-router-dom'
 import { getCourse } from '../data/index.js'
 import { useAuth } from '../auth.jsx'
 import { useLang } from '../i18n.jsx'
+import { useNotes } from '../notes.jsx'
 import Blocks from '../components/Blocks.jsx'
 import Quiz from '../components/Quiz.jsx'
 
@@ -11,6 +13,24 @@ export default function Lesson() {
   const course = getCourse(courseId)
   const { recordLesson, lessonState } = useAuth()
   const { lang, t } = useLang()
+  const { openNotebook } = useNotes()
+
+  // Show a floating "Add to Notebook" pill while text inside the lesson is selected
+  const mainRef = useRef(null)
+  const [selText, setSelText] = useState('')
+  useEffect(() => {
+    const onSelect = () => {
+      const sel = window.getSelection()
+      const text = sel && !sel.isCollapsed ? sel.toString().trim() : ''
+      if (!text || !mainRef.current || !sel.anchorNode || !mainRef.current.contains(sel.anchorNode)) {
+        setSelText('')
+      } else {
+        setSelText(text)
+      }
+    }
+    document.addEventListener('selectionchange', onSelect)
+    return () => document.removeEventListener('selectionchange', onSelect)
+  }, [])
 
   if (!course) return <Navigate to="/courses" replace />
   const unit = course.units.find(u => u.id === unitId)
@@ -47,12 +67,20 @@ export default function Lesson() {
           })}
         </aside>
 
-        <main className="lesson-main" key={`${unitId}/${lessonId}`}>
-          <div className="crumb">
-            <Link to={`/course/${courseId}`} style={{ color: 'var(--accent)' }}>
-              ← {t('backToCourse')}
-            </Link>
-            {' · '}{unitTitle}
+        <main className="lesson-main" key={`${unitId}/${lessonId}`} ref={mainRef}>
+          <div className="crumb crumb-row">
+            <span>
+              <Link to={`/course/${courseId}`} style={{ color: 'var(--accent)' }}>
+                ← {t('backToCourse')}
+              </Link>
+              {' · '}{unitTitle}
+            </span>
+            <button
+              className="btn ghost small"
+              onClick={() => openNotebook({ text: '', source: { courseId, unitId, lessonId } })}
+            >
+              📓 {t('notebook')}
+            </button>
           </div>
           <h1>{lang === 'zh' ? (lesson.titleZh || lesson.title) : lesson.title}</h1>
           {lang === 'both' && lesson.titleZh && lesson.titleZh !== lesson.title && (
@@ -81,6 +109,20 @@ export default function Lesson() {
               <Link className="btn" to={`/course/${courseId}`}>{t('backToCourse')}</Link>
             )}
           </div>
+
+          {selText && (
+            <button
+              className="btn small selection-pill"
+              onMouseDown={e => e.preventDefault()}
+              onClick={() => {
+                openNotebook({ text: selText, source: { courseId, unitId, lessonId } })
+                window.getSelection()?.removeAllRanges()
+                setSelText('')
+              }}
+            >
+              📓 {t('addToNotebook')}
+            </button>
+          )}
         </main>
       </div>
     </div>

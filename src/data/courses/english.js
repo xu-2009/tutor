@@ -1,7 +1,7 @@
 export default {
   id: "english",
-  title: "Honors English",
-  titleZh: "荣誉英语",
+  title: "English",
+  titleZh: "英语",
   subject: "english",
   level: "Honors",
   description: "A complete Honors-level Language Arts course covering grammar, vocabulary, literary analysis, fiction and poetry, essay writing, and rhetoric with research skills.",

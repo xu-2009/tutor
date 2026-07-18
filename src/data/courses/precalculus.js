@@ -1,7 +1,7 @@
 export default {
   id: 'precalculus',
-  title: 'Honors Precalculus',
-  titleZh: '荣誉微积分预备',
+  title: 'Precalculus',
+  titleZh: '微积分预备',
   subject: 'math',
   level: 'Honors',
   description: 'A rigorous study of functions, trigonometry, vectors, and conic sections that builds the algebraic and analytical foundation needed for calculus.',

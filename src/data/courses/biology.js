@@ -1,7 +1,7 @@
 export default {
   id: 'biology',
-  title: 'Honors Biology',
-  titleZh: '荣誉生物',
+  title: 'Biology',
+  titleZh: '生物',
   subject: 'science',
   level: 'Honors',
   description: 'A rigorous introduction to the molecules, cells, genetics, evolution, and ecosystems that explain how living things work.',

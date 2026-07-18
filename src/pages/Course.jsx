@@ -2,12 +2,14 @@ import { Link, useParams, Navigate } from 'react-router-dom'
 import { getCourse } from '../data/index.js'
 import { useAuth } from '../auth.jsx'
 import { useLang } from '../i18n.jsx'
+import { useNotes } from '../notes.jsx'
 
 export default function Course() {
   const { courseId } = useParams()
   const course = getCourse(courseId)
   const { lessonState, courseProgress } = useAuth()
   const { lang, t } = useLang()
+  const { openNotebook } = useNotes()
 
   if (!course) return <Navigate to="/courses" replace />
   const prog = courseProgress(course)
@@ -18,12 +20,15 @@ export default function Course() {
     <div className="container">
       <div className="page-head">
         <p><Link to="/courses" style={{ color: 'var(--accent)' }}>← {t('navCourses')}</Link></p>
-        <h1>
-          {title}
-          {lang === 'both' && course.titleZh !== course.title && (
-            <span style={{ color: 'var(--muted)', fontWeight: 500 }}> · {course.titleZh}</span>
-          )}
-        </h1>
+        <div className="page-head-row">
+          <h1>
+            {title}
+            {lang === 'both' && course.titleZh !== course.title && (
+              <span style={{ color: 'var(--muted)', fontWeight: 500 }}> · {course.titleZh}</span>
+            )}
+          </h1>
+          <button className="btn ghost small" onClick={() => openNotebook()}>📓 {t('notebook')}</button>
+        </div>
         <p>{lang === 'zh' ? (course.descriptionZh || course.description) : course.description}</p>
         <div style={{ maxWidth: 420, marginTop: 12 }}>
           <div className="progress-label">{prog.done}/{prog.total} {t('lessons')} · {prog.pct}% {t('complete')}</div>
