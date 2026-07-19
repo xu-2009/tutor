@@ -274,7 +274,7 @@ export const coursesMeta = [
     "description": "A complete AP Macroeconomics course following the College Board six-unit framework. Every required concept is taught; exam weights are retained separately for assessment planning and diagnostic testing.",
     "descriptionZh": "按照 College Board 官方六单元框架编写的完整 AP 宏观经济学课程。所有必学知识均完整教学；考试占比单独保留，用于组卷、复习规划与诊断测试。",
     "unitCount": 6,
-    "lessonCount": 18
+    "lessonCount": 20
   },
   {
     "id": "ap-french",
