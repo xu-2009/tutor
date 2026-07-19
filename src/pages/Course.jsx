@@ -6,13 +6,21 @@ import { useNotes } from '../notes.jsx'
 
 export default function Course() {
   const { courseId } = useParams()
-  const { course, loading } = useCourse(courseId)
+  const { course, loading, error } = useCourse(courseId)
   const { lessonState, courseProgress } = useAuth()
   const { lang, t } = useLang()
   const { openNotebook } = useNotes()
 
   if (loading) {
     return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  }
+  if (error) {
+    return (
+      <div className="container" style={{ textAlign: 'center', padding: '70px 24px' }}>
+        <p style={{ color: 'var(--muted)', marginBottom: 12 }}>{t('loadFailed')}</p>
+        <button className="btn" onClick={() => window.location.reload()}>{t('refresh')}</button>
+      </div>
+    )
   }
   if (!course) return <Navigate to="/courses" replace />
   const prog = courseProgress(course)

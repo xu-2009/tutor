@@ -33,11 +33,15 @@ export function AuthProvider({ children }) {
   const loadProfile = useCallback(async (sessionUser) => {
     userIdRef.current = sessionUser.id
     setUser(sessionUser.user_metadata?.username || '')
-    const { data } = await supabase
+    // maybeSingle(): no row -> data null with NO error (a new user, empty progress is correct);
+    // a real network/query failure -> error, which we throw so callers keep existing state
+    // rather than silently wiping the user's progress to {}.
+    const { data, error } = await supabase
       .from('profiles')
       .select('progress')
       .eq('id', sessionUser.id)
-      .single()
+      .maybeSingle()
+    if (error) throw error
     applyProgress(data?.progress || {})
   }, [applyProgress])
 
@@ -45,10 +49,18 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!supabaseConfigured) { setLoading(false); return }
     let active = true
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (active && data.session?.user) await loadProfile(data.session.user)
-      if (active) setLoading(false)
-    })
+    ;(async () => {
+      try {
+        const { data } = await supabase.auth.getSession()
+        if (active && data.session?.user) await loadProfile(data.session.user)
+      } catch (err) {
+        // Session or profile load failed — keep whatever state we have (don't wipe
+        // progress) and let the user proceed; a refresh will retry.
+        console.error('Session restore failed:', err?.message || err)
+      } finally {
+        if (active) setLoading(false)
+      }
+    })()
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session?.user) {
         userIdRef.current = null
@@ -95,7 +107,13 @@ export function AuthProvider({ children }) {
     const email = usernameToEmail(name)
     const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw })
     if (error || !data.user) return 'errBadLogin'
-    await loadProfile(data.user)
+    try {
+      await loadProfile(data.user)
+    } catch (err) {
+      // Auth succeeded but the progress fetch failed — let the user in (loadProfile
+      // already set the username); progress will load on the next refresh.
+      console.error('Profile load failed after login:', err?.message || err)
+    }
     return null
   }, [loadProfile])
 

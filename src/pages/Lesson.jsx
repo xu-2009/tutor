@@ -10,7 +10,7 @@ import Quiz from '../components/Quiz.jsx'
 export default function Lesson() {
   const { courseId, unitId, lessonId } = useParams()
   const navigate = useNavigate()
-  const { course, loading } = useCourse(courseId)
+  const { course, loading, error } = useCourse(courseId)
   const { recordLesson, lessonState } = useAuth()
   const { lang, t } = useLang()
   const { openNotebook } = useNotes()
@@ -34,6 +34,14 @@ export default function Lesson() {
 
   if (loading) {
     return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  }
+  if (error) {
+    return (
+      <div className="container" style={{ textAlign: 'center', padding: '70px 24px' }}>
+        <p style={{ color: 'var(--muted)', marginBottom: 12 }}>{t('loadFailed')}</p>
+        <button className="btn" onClick={() => window.location.reload()}>{t('refresh')}</button>
+      </div>
+    )
   }
   if (!course) return <Navigate to="/courses" replace />
   const unit = course.units.find(u => u.id === unitId)

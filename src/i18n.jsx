@@ -71,6 +71,8 @@ const STRINGS = {
   errSaveFailed: { en: 'Could not save your account. Please check your connection and try again.', zh: '账号保存失败，请检查网络后重试。' },
   savingProgress: { en: 'Saving…', zh: '正在保存…' },
   saveFailed: { en: 'Couldn’t save your progress — check your connection.', zh: '进度保存失败——请检查网络。' },
+  loadFailed: { en: 'Couldn’t load this course. Please refresh the page.', zh: '课程加载失败，请刷新页面。' },
+  refresh: { en: 'Refresh', zh: '刷新' },
   retrySave: { en: 'Retry save', zh: '重试保存' },
   errNotConfigured: { en: 'Accounts are unavailable right now (server not configured). Please try again later.', zh: '暂时无法登录（服务器未配置），请稍后再试。' },
   loginRequired: { en: 'Please log in to view courses and save your progress.', zh: '请先登录，以查看课程并保存学习进度。' },
