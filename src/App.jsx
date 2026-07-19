@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx'
 import Courses from './pages/Courses.jsx'
 import Course from './pages/Course.jsx'
 import Lesson from './pages/Lesson.jsx'
+import Diagnostic from './pages/Diagnostic.jsx'
 import { useAuth } from './auth.jsx'
 import { useLang } from './i18n.jsx'
 
@@ -46,6 +47,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/courses" element={<RequireLogin><Courses /></RequireLogin>} />
         <Route path="/course/:courseId" element={<RequireLogin><Course /></RequireLogin>} />
+        <Route path="/course/:courseId/diagnostic" element={<RequireLogin><Diagnostic /></RequireLogin>} />
+        <Route path="/course/:courseId/diagnostic/:scope" element={<RequireLogin><Diagnostic /></RequireLogin>} />
         <Route path="/course/:courseId/:unitId/:lessonId" element={<RequireLogin><Lesson /></RequireLogin>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

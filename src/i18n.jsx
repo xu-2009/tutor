@@ -73,6 +73,25 @@ const STRINGS = {
   saveFailed: { en: 'Couldn’t save your progress — check your connection.', zh: '进度保存失败——请检查网络。' },
   loadFailed: { en: 'Couldn’t load this course. Please refresh the page.', zh: '课程加载失败，请刷新页面。' },
   refresh: { en: 'Refresh', zh: '刷新' },
+  diagnostic: { en: 'Find My Gaps', zh: '查缺补漏' },
+  diagnosticIntro: { en: 'A quick diagnostic covering the whole course — two questions per lesson. Your results show which lessons you’ve mastered and which to review.', zh: '一场覆盖整门课的快速诊断——每节课两道题。结果会告诉你哪些课已掌握、哪些需要复习。' },
+  diagnosticSubmit: { en: 'Submit and see my gaps', zh: '提交，查看结果' },
+  diagnosticScore: { en: 'Diagnostic score', zh: '诊断得分' },
+  diagnosticWeak: { en: 'Review these lessons', zh: '建议复习这些课' },
+  diagnosticStrong: { en: 'You can skip these', zh: '这些课可以跳过' },
+  diagnosticWeakEmpty: { en: 'Nothing to review — great job!', zh: '没有需要复习的——太棒了！' },
+  diagnosticStrongEmpty: { en: 'No lesson fully mastered yet — start with the list above.', zh: '还没有完全掌握的课——先从上面的列表学起。' },
+  diagnosticStudy: { en: 'Study', zh: '去学习' },
+  diagnosticCanSkip: { en: 'mastered', zh: '已掌握' },
+  diagnosticRetake: { en: 'Retake', zh: '重新测' },
+  focusStudy: { en: 'Focus', zh: '重点' },
+  diagnosticHistory: { en: 'Score history', zh: '历史成绩' },
+  diagnosticAttempts: { en: 'attempts', zh: '测验次数' },
+  diagnosticBest: { en: 'best', zh: '最好' },
+  diagnosticScopeIntro: { en: 'Choose what to test: the whole course, or a single unit.', zh: '选择测验范围：整个科目，或某一个单元。' },
+  diagnosticScopeAll: { en: 'Whole course', zh: '整个科目' },
+  diagnosticQuestions: { en: 'questions', zh: '题' },
+  diagnosticLast: { en: 'last', zh: '上次' },
   retrySave: { en: 'Retry save', zh: '重试保存' },
   errNotConfigured: { en: 'Accounts are unavailable right now (server not configured). Please try again later.', zh: '暂时无法登录（服务器未配置），请稍后再试。' },
   loginRequired: { en: 'Please log in to view courses and save your progress.', zh: '请先登录，以查看课程并保存学习进度。' },
@@ -97,6 +116,17 @@ export function LangProvider({ children }) {
   const [lang, setLang] = useState(() => localStorage.getItem('sp_lang') || 'both')
   useEffect(() => { localStorage.setItem('sp_lang', lang) }, [lang])
   return <LangContext.Provider value={{ lang, setLang }}>{children}</LangContext.Provider>
+}
+
+// Some choice strings were authored bilingually in one string ("area 面积").
+// In English mode, show only the English part; keep the whole string otherwise.
+export function choiceText(choice, lang) {
+  if (lang !== 'en') return choice
+  const s = String(choice)
+  const m = s.match(/[一-鿿]/)
+  if (!m) return s
+  const en = s.slice(0, m.index).trim()
+  return en || s
 }
 
 export function useLang() {

@@ -149,6 +149,42 @@ export function AuthProvider({ children }) {
     [progress]
   )
 
+  // Diagnostic ("Find My Gaps") results are stored under a reserved `_diag` key
+  // alongside the per-course progress, so they persist in Supabase too.
+  // History is kept per scope (whole course vs a single unit); per-lesson mastery
+  // (_diag) always merges into the course so the lesson list reflects any scope.
+  const histKey = (courseId, scope) => (!scope || scope === 'all' ? courseId : `${courseId}::${scope}`)
+
+  const recordDiagnostic = useCallback(async (courseId, scope, results, score) => {
+    const prev = progressRef.current
+    const attempt = { at: new Date().toISOString(), correct: score.correct, total: score.total }
+    const key = histKey(courseId, scope)
+    const priorHistory = prev._diagHistory?.[key] || []
+    const next = {
+      ...prev,
+      _diag: { ...(prev._diag || {}), [courseId]: { ...(prev._diag?.[courseId] || {}), ...results } },
+      _diagHistory: { ...(prev._diagHistory || {}), [key]: [...priorHistory, attempt].slice(-50) },
+    }
+    applyProgress(next)
+    const id = userIdRef.current
+    if (!id) return false
+    const { error } = await supabase
+      .from('profiles')
+      .upsert({ id, progress: next, updated_at: new Date().toISOString() })
+    if (error) { console.error('Failed to save diagnostic:', error.message); return false }
+    return true
+  }, [applyProgress])
+
+  const diagnosticState = useCallback(
+    (courseId, unitId, lessonId) => progress._diag?.[courseId]?.[`${unitId}/${lessonId}`] || null,
+    [progress]
+  )
+
+  const diagnosticHistory = useCallback(
+    (courseId, scope) => progress._diagHistory?.[histKey(courseId, scope)] || [],
+    [progress]
+  )
+
   const courseProgress = useCallback((course) => {
     // Works with both a full course (has units) and lightweight metadata (has lessonCount).
     const total = course.lessonCount ?? course.units.reduce((n, u) => n + u.lessons.length, 0)
@@ -157,7 +193,7 @@ export function AuthProvider({ children }) {
   }, [progress])
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout, recordLesson, lessonState, courseProgress }}>
+    <AuthContext.Provider value={{ user, loading, signup, login, logout, recordLesson, lessonState, courseProgress, recordDiagnostic, diagnosticState, diagnosticHistory }}>
       {children}
     </AuthContext.Provider>
   )

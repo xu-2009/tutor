@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLang } from '../i18n.jsx'
+import { useLang, choiceText } from '../i18n.jsx'
 import { MathText } from './MathText.jsx'
 
 function BiLine({ obj }) {
@@ -25,7 +25,7 @@ function isCorrect(problem, value) {
 }
 
 export default function Quiz({ problems, onComplete, savedScore }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   // answers[i] = choice index (mc) or string (input)
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -80,7 +80,7 @@ export default function Quiz({ problems, onComplete, savedScore }) {
                       onClick={() => setAnswers(a => ({ ...a, [i]: ci }))}
                     >
                       <span className="letter">{String.fromCharCode(65 + ci)}</span>
-                      <span><MathText text={c} /></span>
+                      <span><MathText text={choiceText(c, lang)} /></span>
                     </button>
                   )
                 })}

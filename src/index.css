@@ -274,3 +274,59 @@ footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 3
   position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 50;
   box-shadow: 0 8px 24px rgba(15, 20, 40, 0.28);
 }
+
+/* ---------- Diagnostic (Find My Gaps) ---------- */
+.course-progress-row { display: flex; align-items: flex-end; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+.diag-unit { margin-top: 22px; }
+.diag-unit-title { font-size: 1.1rem; border-bottom: 2px solid var(--line); padding-bottom: 6px; margin-bottom: 12px; }
+.diag-lesson-group { margin: 0 0 18px; }
+.diag-lesson-label { font-weight: 600; color: var(--muted); font-size: 0.9rem; margin-bottom: 8px; }
+.diag-submit-bar {
+  position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; background: var(--card); border-top: 1px solid var(--line); padding: 12px 0; margin-top: 20px;
+}
+.diag-report { margin-top: 8px; }
+.diag-score { text-align: center; background: var(--accent-soft); border-radius: var(--radius); padding: 18px; margin-bottom: 18px; }
+.diag-score .big { font-size: 2rem; font-weight: 800; color: var(--accent); }
+.diag-block { margin-bottom: 18px; }
+.diag-block h3 { margin-bottom: 10px; }
+.diag-lesson {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line);
+  border-radius: 10px; margin-bottom: 8px; text-decoration: none; color: var(--ink); background: var(--card);
+}
+.diag-block.weak .diag-lesson { border-left: 4px solid var(--amber); }
+.diag-block.weak .diag-lesson:hover { background: var(--accent-soft); }
+.diag-lesson.done { border-left: 4px solid var(--green); background: var(--green-soft); cursor: default; }
+.diag-lesson > span:nth-child(2) { flex: 1; }
+.diag-x { font-weight: 700; color: var(--amber); min-width: 34px; }
+.diag-check { color: var(--green); font-weight: 800; }
+.diag-go { color: var(--accent); font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+.diag-skip { color: var(--green); font-size: 0.82rem; white-space: nowrap; }
+
+/* ---------- Diagnostic markers on the course lesson list ---------- */
+.lesson-row.focus { background: #fffbeb; }
+.check.focus { color: var(--amber); background: transparent; border-color: var(--amber); }
+.focus-tag {
+  font-size: 0.72rem; font-weight: 700; color: var(--amber);
+  background: #fef3c7; border-radius: 6px; padding: 2px 8px; white-space: nowrap;
+}
+
+/* ---------- Trend chart (diagnostic history) ---------- */
+.trend-chart { width: 100%; max-width: 460px; height: auto; display: block; }
+.trend-grid { stroke: var(--line); stroke-width: 1; }
+.trend-line { stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.trend-dot { fill: var(--accent); }
+.trend-value { fill: var(--accent); font-size: 9px; font-weight: 700; }
+.trend-axis { fill: var(--muted); font-size: 9px; }
+
+/* ---------- Diagnostic scope picker ---------- */
+.diag-scope-list { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.diag-scope-card {
+  display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--card); text-decoration: none; color: var(--ink); transition: background 0.15s, border-color 0.15s;
+}
+.diag-scope-card:hover { background: var(--accent-soft); border-color: var(--accent); }
+.diag-scope-card.all { border-left: 4px solid var(--accent); }
+.diag-scope-title { font-weight: 700; font-size: 1.02rem; }
+.diag-scope-meta { color: var(--muted); font-size: 0.85rem; margin-top: 3px; }
+.diag-scope-last { color: var(--accent); font-weight: 600; }

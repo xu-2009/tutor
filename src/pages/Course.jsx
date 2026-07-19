@@ -7,7 +7,7 @@ import { useNotes } from '../notes.jsx'
 export default function Course() {
   const { courseId } = useParams()
   const { course, loading, error } = useCourse(courseId)
-  const { lessonState, courseProgress } = useAuth()
+  const { lessonState, courseProgress, diagnosticState } = useAuth()
   const { lang, t } = useLang()
   const { openNotebook } = useNotes()
 
@@ -41,9 +41,12 @@ export default function Course() {
           <button className="btn ghost small" onClick={() => openNotebook()}>📓 {t('notebook')}</button>
         </div>
         <p>{lang === 'zh' ? (course.descriptionZh || course.description) : course.description}</p>
-        <div style={{ maxWidth: 420, marginTop: 12 }}>
-          <div className="progress-label">{prog.done}/{prog.total} {t('lessons')} · {prog.pct}% {t('complete')}</div>
-          <div className="progress-bar"><div style={{ width: `${prog.pct}%` }} /></div>
+        <div className="course-progress-row">
+          <div style={{ flex: 1, maxWidth: 420 }}>
+            <div className="progress-label">{prog.done}/{prog.total} {t('lessons')} · {prog.pct}% {t('complete')}</div>
+            <div className="progress-bar"><div style={{ width: `${prog.pct}%` }} /></div>
+          </div>
+          <Link className="btn small" to={`/course/${course.id}/diagnostic`}>🔍 {t('diagnostic')}</Link>
         </div>
       </div>
 
@@ -67,19 +70,25 @@ export default function Course() {
               <div className="lesson-list">
                 {unit.lessons.map(lesson => {
                   const state = lessonState(course.id, unit.id, lesson.id)
+                  const diag = diagnosticState(course.id, unit.id, lesson.id)
+                  const mastered = state?.done || diag === 'mastered'
+                  const focus = !mastered && diag === 'weak'
                   return (
                     <Link
                       to={`/course/${course.id}/${unit.id}/${lesson.id}`}
-                      className="lesson-row"
+                      className={`lesson-row${focus ? ' focus' : ''}`}
                       key={lesson.id}
                     >
-                      <span className={`check ${state?.done ? 'done' : ''}`}>{state?.done ? '✓' : ''}</span>
+                      <span className={`check ${mastered ? 'done' : ''}${focus ? ' focus' : ''}`}>
+                        {mastered ? '✓' : (focus ? '●' : '')}
+                      </span>
                       <span>
                         {lang === 'zh' ? (lesson.titleZh || lesson.title) : lesson.title}
                         {lang === 'both' && lesson.titleZh && lesson.titleZh !== lesson.title && (
                           <span style={{ color: 'var(--muted)' }}> · {lesson.titleZh}</span>
                         )}
                       </span>
+                      {focus && <span className="focus-tag">{t('focusStudy')}</span>}
                       {state?.score && (
                         <span className="score">{t('score')}: {state.score.correct}/{state.score.total}</span>
                       )}
