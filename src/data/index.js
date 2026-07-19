@@ -1,4 +1,5 @@
 import secondaryMath1Honors from './courses/secondary-math-1-honors.js'
+import secondaryMath2Honors from './courses/secondary-math-2-honors.js'
 import algebra1 from './courses/algebra1.js'
 import geometry from './courses/geometry.js'
 import algebra2 from './courses/algebra2.js'
@@ -21,6 +22,7 @@ import spanish1Honors from './courses/spanish-1-honors.js'
 
 export const courses = [
   secondaryMath1Honors,
+  secondaryMath2Honors,
   algebra1,
   geometry,
   algebra2,

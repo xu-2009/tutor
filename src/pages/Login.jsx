@@ -15,19 +15,20 @@ export default function Login() {
   const location = useLocation()
   const dest = location.state?.from || '/courses'
 
-  const submit = (e) => {
+  const [busy, setBusy] = useState(false)
+
+  const submit = async (e) => {
     e.preventDefault()
     setError(null)
     if (!name.trim() || !pw) return setError('errEmpty')
     if (mode === 'signup') {
-      if (pw.length < 4) return setError('errShortPw')
+      if (pw.length < 6) return setError('errShortPw')
       if (pw !== pw2) return setError('errNoMatch')
-      const err = signup(name, pw)
-      if (err) return setError(err)
-    } else {
-      const err = login(name, pw)
-      if (err) return setError(err)
     }
+    setBusy(true)
+    const err = mode === 'signup' ? await signup(name, pw) : await login(name, pw)
+    setBusy(false)
+    if (err) return setError(err)
     navigate(dest, { replace: true })
   }
 
@@ -54,8 +55,8 @@ export default function Login() {
           </div>
         )}
 
-        <button className="btn" style={{ width: '100%' }}>
-          {mode === 'login' ? t('login') : t('signup')}
+        <button className="btn" style={{ width: '100%' }} disabled={busy}>
+          {busy ? '…' : (mode === 'login' ? t('login') : t('signup'))}
         </button>
 
         <div className="auth-switch">

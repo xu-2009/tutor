@@ -11,9 +11,12 @@ import { useAuth } from './auth.jsx'
 import { useLang } from './i18n.jsx'
 
 function RequireLogin({ children }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const { t } = useLang()
   const location = useLocation()
+  if (loading) {
+    return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  }
   if (!user) {
     return (
       <div className="container" style={{ textAlign: 'center', padding: '70px 24px' }}>

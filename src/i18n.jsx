@@ -66,7 +66,7 @@ const STRINGS = {
   errBadLogin: { en: 'Name or password is incorrect.', zh: '姓名或密码不正确。' },
   errNoMatch: { en: 'Passwords do not match.', zh: '两次输入的密码不一致。' },
   errEmpty: { en: 'Please fill in every field.', zh: '请填写所有字段。' },
-  errShortPw: { en: 'Password must be at least 4 characters.', zh: '密码至少 4 个字符。' },
+  errShortPw: { en: 'Password must be at least 6 characters.', zh: '密码至少 6 个字符。' },
   loginRequired: { en: 'Please log in to view courses and save your progress.', zh: '请先登录，以查看课程并保存学习进度。' },
   score: { en: 'Score', zh: '得分' },
   notebook: { en: 'Notebook', zh: '笔记本' },

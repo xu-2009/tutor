@@ -1,55 +1,87 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
+import { supabase } from './supabase.js'
 
-// --- localStorage-backed accounts & progress ---
-// sp_users            : { [name]: { pw: <hash>, createdAt } }
-// sp_session          : current logged-in name
-// sp_progress_<name>  : { [courseId]: { [unitId + '/' + lessonId]: { done: true, score: {correct, total} } } }
+// --- Supabase-backed accounts & progress ---
+// Accounts live in Supabase Auth; progress lives in the `profiles` table as one
+// JSONB blob per student: { [courseId]: { [unitId + '/' + lessonId]: { done, score } } }.
+// Students log in with a username + password (no email). We turn the username into a
+// deterministic, ASCII, case-insensitive fake email so Supabase Auth can key on it —
+// this also fixes the old case-sensitivity bug and works for non-ASCII (e.g. Chinese) names.
 
-// Simple non-cryptographic hash — this is a classroom app storing data
-// locally in the browser; it just avoids keeping the raw password string.
-function hash(str) {
-  let h = 5381
-  for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0
-  return String(h)
+function usernameToEmail(username) {
+  const norm = username.trim().toLowerCase()
+  const hex = Array.from(new TextEncoder().encode(norm))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  return `u${hex}@scholarpath.local`
 }
-
-const load = (k, fallback) => {
-  try { return JSON.parse(localStorage.getItem(k)) ?? fallback } catch { return fallback }
-}
-const save = (k, v) => localStorage.setItem(k, JSON.stringify(v))
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => localStorage.getItem('sp_session') || null)
-  const [progress, setProgress] = useState(() =>
-    user ? load(`sp_progress_${user}`, {}) : {}
-  )
+  const [user, setUser] = useState(null)        // display username, or null
+  const [progress, setProgress] = useState({})
+  const [loading, setLoading] = useState(true)  // true until the initial session check resolves
+  const userIdRef = useRef(null)                // current auth user id, for writes
 
-  const signup = useCallback((name, pw) => {
-    const users = load('sp_users', {})
-    const key = name.trim()
-    if (users[key]) return 'errNameTaken'
-    users[key] = { pw: hash(pw), createdAt: new Date().toISOString() }
-    save('sp_users', users)
-    localStorage.setItem('sp_session', key)
-    setUser(key)
-    setProgress(load(`sp_progress_${key}`, {}))
+  const loadProfile = useCallback(async (sessionUser) => {
+    userIdRef.current = sessionUser.id
+    setUser(sessionUser.user_metadata?.username || '')
+    const { data } = await supabase
+      .from('profiles')
+      .select('progress')
+      .eq('id', sessionUser.id)
+      .single()
+    setProgress(data?.progress || {})
+  }, [])
+
+  // Restore an existing session on load, and keep in sync with auth changes.
+  useEffect(() => {
+    let active = true
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (active && data.session?.user) await loadProfile(data.session.user)
+      if (active) setLoading(false)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        userIdRef.current = null
+        setUser(null)
+        setProgress({})
+      }
+    })
+    return () => { active = false; sub.subscription.unsubscribe() }
+  }, [loadProfile])
+
+  const signup = useCallback(async (name, pw) => {
+    const email = usernameToEmail(name)
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: pw,
+      options: { data: { username: name.trim() } },
+    })
+    if (error) {
+      if (/already|registered|exists/i.test(error.message)) return 'errNameTaken'
+      return 'errBadLogin'
+    }
+    if (!data.user) return 'errBadLogin'
+    userIdRef.current = data.user.id
+    await supabase.from('profiles').upsert({ id: data.user.id, username: name.trim(), progress: {} })
+    setUser(name.trim())
+    setProgress({})
     return null
   }, [])
 
-  const login = useCallback((name, pw) => {
-    const users = load('sp_users', {})
-    const key = name.trim()
-    if (!users[key] || users[key].pw !== hash(pw)) return 'errBadLogin'
-    localStorage.setItem('sp_session', key)
-    setUser(key)
-    setProgress(load(`sp_progress_${key}`, {}))
+  const login = useCallback(async (name, pw) => {
+    const email = usernameToEmail(name)
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw })
+    if (error || !data.user) return 'errBadLogin'
+    await loadProfile(data.user)
     return null
-  }, [])
+  }, [loadProfile])
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('sp_session')
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
+    userIdRef.current = null
     setUser(null)
     setProgress({})
   }, [])
@@ -58,8 +90,12 @@ export function AuthProvider({ children }) {
     setProgress(prev => {
       const next = { ...prev, [courseId]: { ...(prev[courseId] || {}) } }
       next[courseId][`${unitId}/${lessonId}`] = { done: true, score }
-      const name = localStorage.getItem('sp_session')
-      if (name) save(`sp_progress_${name}`, next)
+      const id = userIdRef.current
+      if (id) {
+        supabase.from('profiles')
+          .upsert({ id, progress: next, updated_at: new Date().toISOString() })
+          .then(({ error }) => { if (error) console.error('Failed to save progress:', error.message) })
+      }
       return next
     })
   }, [])
@@ -76,7 +112,7 @@ export function AuthProvider({ children }) {
   }, [progress])
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout, recordLesson, lessonState, courseProgress }}>
+    <AuthContext.Provider value={{ user, loading, signup, login, logout, recordLesson, lessonState, courseProgress }}>
       {children}
     </AuthContext.Provider>
   )
