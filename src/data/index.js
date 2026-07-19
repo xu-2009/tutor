@@ -1,5 +1,6 @@
 import secondaryMath1Honors from './courses/secondary-math-1-honors.js'
 import secondaryMath2Honors from './courses/secondary-math-2-honors.js'
+import apStatistics from './courses/ap-statistics.js'
 import algebra1 from './courses/algebra1.js'
 import geometry from './courses/geometry.js'
 import algebra2 from './courses/algebra2.js'
@@ -30,6 +31,7 @@ export const courses = [
   precalculus,
   apCalcAB,
   apCalcBC,
+  apStatistics,
   physics,
   chemistry,
   biology,

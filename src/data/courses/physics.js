@@ -1,12 +1,49 @@
+import apPhysics1 from './ap-physics-1.js'
+import supplementalUnits from './physics-supplement.js'
+
+const generalizeText = value => {
+  if (typeof value === 'string') {
+    return value
+      .replaceAll('AP Physics 1', 'this algebra-based course')
+      .replaceAll('AP exam tip', 'Course tip')
+      .replaceAll('the AP exam', 'physics problems')
+      .replaceAll('an AP exam', 'a physics assessment')
+      .replaceAll('AP exam', 'course assessment')
+  }
+  if (Array.isArray(value)) return value.map(generalizeText)
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, generalizeText(item)]))
+  }
+  return value
+}
+
+const apUnit = (id, title, titleZh, lessonIds = null) => {
+  const source = apPhysics1.units.find(unit => unit.id === id)
+  const lessons = lessonIds
+    ? lessonIds.map(lessonId => source.lessons.find(item => item.id === lessonId))
+    : source.lessons
+  return { id, title, titleZh, lessons: generalizeText(lessons) }
+}
+
+const extendedUnits = [
+  apUnit('linear-momentum', 'Momentum and Collisions', '动量与碰撞'),
+  apUnit('dynamics', 'Circular Motion and Gravitation', '圆周运动与万有引力', ['circular-motion-gravitation']),
+  apUnit('torque-rotational-dynamics', 'Rotational Motion and Torque', '转动运动与力矩'),
+  apUnit('rotating-systems', 'Rotational Energy and Angular Momentum', '转动能量与角动量'),
+  apUnit('oscillations', 'Oscillations', '振动'),
+  apUnit('fluids', 'Fluid Mechanics', '流体力学'),
+]
+
 export default {
   id: 'physics',
   title: 'Physics',
   titleZh: '物理',
   subject: 'science',
-  level: 'Honors',
-  description: 'A first-principles tour of mechanics, waves, electricity, magnetism, and modern physics, built around problem solving with real numbers and units.',
-  descriptionZh: '从基本原理出发，系统学习力学、波动、电学、磁学与近代物理，注重带单位的真实数值解题训练。',
+  level: 'Standard',
+  description: 'A complete algebra-based U.S. high-school physics course covering laboratory skills, mechanics, fluids, thermal physics, waves, optics, electricity, magnetism, and modern physics.',
+  descriptionZh: '完整的美国高中代数型普通物理课程，涵盖实验技能、力学、流体、热学、波、光学、电学、磁学与近代物理。',
   units: [
+    supplementalUnits[0],
     {
       id: 'kinematics',
       title: 'Kinematics',
@@ -695,5 +732,7 @@ export default {
         },
       ],
     },
+    ...extendedUnits,
+    ...supplementalUnits.slice(1),
   ],
 }
