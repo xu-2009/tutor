@@ -19,6 +19,7 @@ import apPhysics1 from './courses/ap-physics-1.js'
 import apPhysicsC from './courses/ap-physics-c.js'
 import apUsHistory from './courses/ap-us-history.js'
 import apEuroHistory from './courses/ap-euro-history.js'
+import apMicroeconomics from './courses/ap-microeconomics.js'
 import apChinese from './courses/ap-chinese.js'
 import spanish1Honors from './courses/spanish-1-honors.js'
 
@@ -46,6 +47,7 @@ export const courses = [
   spanish1Honors,
   apUsHistory,
   apEuroHistory,
+  apMicroeconomics,
 ]
 
 export const getCourse = (id) => courses.find(c => c.id === id)
