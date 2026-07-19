@@ -275,5 +275,27 @@ export const coursesMeta = [
     "descriptionZh": "按照 College Board 官方六单元框架编写的完整 AP 宏观经济学课程。所有必学知识均完整教学；考试占比单独保留，用于组卷、复习规划与诊断测试。",
     "unitCount": 6,
     "lessonCount": 18
+  },
+  {
+    "id": "ap-french",
+    "title": "AP French Language & Culture",
+    "titleZh": "AP 法语语言与文化",
+    "subject": "language",
+    "level": "AP",
+    "description": "A complete AP French Language & Culture course built around the six College Board themes, teaching advanced vocabulary, grammar (past tenses, future/conditional, and the subjunctive), and culture through examples, dialogues, and graded practice.",
+    "descriptionZh": "一门完整的 AP French 语言与文化课程，围绕美国大学理事会的六大主题，通过例句、对话和分级练习教授高级词汇、语法（含过去时、将来/条件式与虚拟式）以及相关文化。",
+    "unitCount": 6,
+    "lessonCount": 18
+  },
+  {
+    "id": "ap-spanish",
+    "title": "AP Spanish Language & Culture",
+    "titleZh": "AP 西班牙语语言与文化",
+    "subject": "language",
+    "level": "AP",
+    "description": "A complete AP Spanish Language & Culture course built around the six College Board themes, teaching advanced vocabulary, grammar (past tenses, future/conditional, and the subjunctive), and culture through examples, dialogues, and graded practice.",
+    "descriptionZh": "一门完整的 AP Spanish 语言与文化课程，围绕美国大学理事会的六大主题，通过例句、对话和分级练习教授高级词汇、语法（含过去时、将来/条件式与虚拟式）以及相关文化。",
+    "unitCount": 6,
+    "lessonCount": 18
   }
 ]
