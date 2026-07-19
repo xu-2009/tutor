@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getCourse } from '../data/index.js'
+import { useCourse } from '../data/useCourse.js'
+import { coursesMeta } from '../data/index.js'
 import { useNotes } from '../notes.jsx'
 import { useLang } from '../i18n.jsx'
 
-function sourceInfo(source, lang) {
+// Resolve a note's source into a display label + route. Uses the course chunk
+// (loaded on demand, cached) for the lesson title, and falls back to the
+// lightweight catalog title while that chunk loads.
+function useSourceInfo(source, lang) {
+  const { course } = useCourse(source?.courseId)
   if (!source) return null
-  const course = getCourse(source.courseId)
-  const unit = course?.units.find(u => u.id === source.unitId)
+  const to = `/course/${source.courseId}/${source.unitId}/${source.lessonId}`
+  const meta = coursesMeta.find(c => c.id === source.courseId)
+  const courseTitle = meta ? (lang === 'zh' ? (meta.titleZh || meta.title) : meta.title) : source.courseId
+  if (!course) return { label: courseTitle, to }
+  const unit = course.units.find(u => u.id === source.unitId)
   const lesson = unit?.lessons.find(l => l.id === source.lessonId)
-  if (!course || !lesson) return null
-  const courseTitle = lang === 'zh' ? (course.titleZh || course.title) : course.title
-  const lessonTitle = lang === 'zh' ? (lesson.titleZh || lesson.title) : lesson.title
-  return {
-    label: `${courseTitle} · ${lessonTitle}`,
-    to: `/course/${source.courseId}/${source.unitId}/${source.lessonId}`,
-  }
+  const lessonTitle = lesson ? (lang === 'zh' ? (lesson.titleZh || lesson.title) : lesson.title) : ''
+  return { label: lessonTitle ? `${courseTitle} · ${lessonTitle}` : courseTitle, to }
 }
 
 function NoteCard({ note }) {
@@ -23,7 +26,7 @@ function NoteCard({ note }) {
   const { lang, t } = useLang()
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState(note.text)
-  const src = sourceInfo(note.source, lang)
+  const src = useSourceInfo(note.source, lang)
 
   const saveEdit = () => {
     if (text.trim()) updateNote(note.id, text)
@@ -71,6 +74,7 @@ export default function Notebook() {
   const { lang, t } = useLang()
   const [text, setText] = useState('')
   const [source, setSource] = useState(null)
+  const draftSrc = useSourceInfo(source, lang)
 
   useEffect(() => {
     if (isOpen) {
@@ -88,7 +92,6 @@ export default function Notebook() {
 
   if (!isOpen) return null
 
-  const draftSrc = sourceInfo(source, lang)
   const submit = () => {
     if (!text.trim()) return
     addNote(text, source)

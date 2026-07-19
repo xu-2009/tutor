@@ -1,0 +1,279 @@
+// AUTO-GENERATED lightweight catalog metadata (no lesson content/problems).
+// Regenerate after adding/removing courses: node scripts/gen-courses-meta.mjs
+export const coursesMeta = [
+  {
+    "id": "secondary-math-1-honors",
+    "title": "Secondary Math I Honors",
+    "titleZh": "中学数学一（荣誉）",
+    "subject": "math",
+    "level": "Honors",
+    "description": "Utah's honors first-year integrated mathematics course, following the Utah Core Standards: quantities and linear equations, functions, systems, arithmetic and geometric sequences, linear and exponential models, descriptive statistics, transformations and congruence, and coordinate geometry — algebra, geometry, and statistics woven together.",
+    "descriptionZh": "犹他州荣誉级第一年整合数学课程，遵循犹他州核心标准（Utah Core Standards）：量与一次方程、函数、方程组、等差与等比数列、线性与指数模型、描述性统计、图形变换与全等、坐标几何——将代数、几何与统计融为一体。",
+    "unitCount": 11,
+    "lessonCount": 20
+  },
+  {
+    "id": "secondary-math-2-honors",
+    "title": "Secondary Math II Honors",
+    "titleZh": "中学数学二（荣誉）",
+    "subject": "math",
+    "level": "Honors",
+    "description": "Utah's honors second-year integrated mathematics course, following the Utah Core Standards: extending the number system, quadratic expressions and functions, solving quadratic equations, complex numbers, more functions, congruence and geometric proof, similarity and right-triangle trigonometry, circles, and probability.",
+    "descriptionZh": "犹他州荣誉级第二年整合数学课程，遵循犹他州核心标准（Utah Core Standards）：扩展数系、二次式与二次函数、解一元二次方程、复数、更多函数、全等与几何证明、相似与直角三角形三角学、圆，以及概率。",
+    "unitCount": 10,
+    "lessonCount": 20
+  },
+  {
+    "id": "algebra1",
+    "title": "Algebra 1",
+    "titleZh": "代数一",
+    "subject": "math",
+    "level": "Honors",
+    "description": "A complete Algebra 1 course following the standard U.S. sequence (Khan Academy order): from algebra foundations and linear equations through systems, functions, sequences, exponentials, and quadratics.",
+    "descriptionZh": "完整的代数一课程，按照美国学校标准顺序（Khan Academy 单元顺序）编排：从代数基础、一次方程，到方程组、函数、数列、指数函数与二次函数。",
+    "unitCount": 15,
+    "lessonCount": 30
+  },
+  {
+    "id": "geometry",
+    "title": "Geometry",
+    "titleZh": "几何",
+    "subject": "math",
+    "level": "Honors",
+    "description": "A complete high school Geometry course: foundations and proof, parallel lines, transformations, congruence, triangle relationships, quadrilaterals, similarity, right-triangle trigonometry, circles, area, and solid geometry.",
+    "descriptionZh": "完整的高中几何课程：几何基础与证明、平行线、图形变换、全等、三角形中的关系、四边形、相似、直角三角形与三角比、圆、面积以及立体几何。",
+    "unitCount": 12,
+    "lessonCount": 29
+  },
+  {
+    "id": "algebra2",
+    "title": "Algebra 2",
+    "titleZh": "代数二",
+    "subject": "math",
+    "level": "Honors",
+    "description": "A complete Algebra 2 course following the standard U.S. textbook sequence: functions and linear systems, quadratics and complex numbers, polynomials, radicals, exponentials and logarithms, rational functions, sequences and series, trigonometry, probability, and statistics.",
+    "descriptionZh": "完整的代数二课程，按照美国教材的标准章节编排：函数与线性方程组、二次函数与复数、多项式、根式、指数与对数、有理函数、数列与级数、三角学、概率与统计。",
+    "unitCount": 10,
+    "lessonCount": 25
+  },
+  {
+    "id": "precalculus",
+    "title": "Precalculus",
+    "titleZh": "微积分预备",
+    "subject": "math",
+    "level": "Honors",
+    "description": "A complete Precalculus course and the on-ramp to Calculus: analysis of functions, polynomial/rational/exponential/logarithmic functions, trigonometry and its applications, vectors, matrices, conic sections, parametric equations, sequences and series, and an introduction to limits.",
+    "descriptionZh": "完整的微积分预备课程，通往微积分的桥梁：函数分析，多项式/有理/指数/对数函数，三角函数及其应用，向量，矩阵，圆锥曲线，参数方程，数列与级数，以及极限入门。",
+    "unitCount": 11,
+    "lessonCount": 23
+  },
+  {
+    "id": "ap-calculus-ab",
+    "title": "AP Calculus AB",
+    "titleZh": "AP 微积分 AB",
+    "subject": "math",
+    "level": "AP",
+    "description": "A complete first course in differential and integral calculus following the official College Board 8-unit framework: limits and continuity, derivatives and their applications, integrals and accumulation, differential equations, and applications of integration.",
+    "descriptionZh": "完整的微积分入门课程，按照 College Board 官方 8 个单元的框架编排：极限与连续、导数及其应用、积分与累积、微分方程，以及积分的应用。",
+    "unitCount": 8,
+    "lessonCount": 22
+  },
+  {
+    "id": "ap-calculus-bc",
+    "title": "AP Calculus BC",
+    "titleZh": "AP 微积分 BC",
+    "subject": "math",
+    "level": "AP",
+    "description": "The complete AP Calculus BC course following the official College Board 10-unit framework: limits, differentiation and its applications, integration techniques, differential equations, parametric and polar calculus, and infinite series.",
+    "descriptionZh": "完整的 AP 微积分 BC 课程，按照 College Board 官方 10 个单元的框架编排：极限、导数及其应用、积分技巧、微分方程、参数与极坐标微积分以及无穷级数。",
+    "unitCount": 10,
+    "lessonCount": 30
+  },
+  {
+    "id": "ap-statistics",
+    "title": "AP Statistics",
+    "titleZh": "AP 统计学",
+    "subject": "math",
+    "level": "AP",
+    "description": "The complete AP Statistics course following the official College Board nine-unit framework: exploring one- and two-variable data, collecting data, probability and random variables, sampling distributions, and inference for proportions, means, chi-square, and regression slopes.",
+    "descriptionZh": "完整的 AP 统计学课程，按照 College Board 官方九个单元的框架编排：单变量与双变量数据探索、数据收集、概率与随机变量、抽样分布，以及关于比例、均值、卡方与回归斜率的统计推断。",
+    "unitCount": 9,
+    "lessonCount": 15
+  },
+  {
+    "id": "physics",
+    "title": "Physics",
+    "titleZh": "物理",
+    "subject": "science",
+    "level": "Standard",
+    "description": "A complete algebra-based U.S. high-school physics course covering laboratory skills, mechanics, fluids, thermal physics, waves, optics, electricity, magnetism, and modern physics.",
+    "descriptionZh": "完整的美国高中代数型普通物理课程，涵盖实验技能、力学、流体、热学、波、光学、电学、磁学与近代物理。",
+    "unitCount": 16,
+    "lessonCount": 25
+  },
+  {
+    "id": "chemistry",
+    "title": "Honors Chemistry",
+    "titleZh": "荣誉化学",
+    "subject": "science",
+    "level": "Honors",
+    "description": "A complete first-year honors chemistry course: matter and measurement, atomic structure, the periodic table, bonding, nomenclature and reactions, stoichiometry, gases, solutions, acids and bases, thermochemistry, kinetics and equilibrium, and nuclear chemistry.",
+    "descriptionZh": "完整的一年级荣誉化学课程：物质与测量、原子结构、元素周期表、化学键、命名与化学反应、化学计量、气体、溶液、酸碱、热化学、动力学与平衡，以及核化学。",
+    "unitCount": 11,
+    "lessonCount": 21
+  },
+  {
+    "id": "biology",
+    "title": "Biology",
+    "titleZh": "生物",
+    "subject": "science",
+    "level": "Honors",
+    "description": "A rigorous introduction to the molecules, cells, genetics, evolution, and ecosystems that explain how living things work.",
+    "descriptionZh": "严谨系统地介绍构成生命的分子、细胞、遗传、进化与生态系统，帮助理解生物如何运作。",
+    "unitCount": 8,
+    "lessonCount": 18
+  },
+  {
+    "id": "ap-chemistry",
+    "title": "AP Chemistry",
+    "titleZh": "AP 化学",
+    "subject": "science",
+    "level": "AP",
+    "description": "The complete AP Chemistry course following the official College Board nine-unit framework: atomic structure, bonding, properties of matter, reactions, kinetics, thermochemistry, equilibrium, acids and bases, and electrochemistry.",
+    "descriptionZh": "完整的 AP 化学课程，按照 College Board 官方九个单元的框架编排：原子结构、化学键、物质性质、化学反应、动力学、热化学、化学平衡、酸碱以及电化学。",
+    "unitCount": 9,
+    "lessonCount": 23
+  },
+  {
+    "id": "ap-physics-1",
+    "title": "AP Physics 1",
+    "titleZh": "AP 物理 1",
+    "subject": "science",
+    "level": "AP",
+    "description": "The complete algebra-based AP Physics 1 course following the official College Board eight-unit framework: kinematics, dynamics, energy, momentum, rotation, oscillations, and fluids.",
+    "descriptionZh": "完整的代数基础 AP 物理 1 课程，按照 College Board 官方八个单元的框架编排：运动学、动力学、能量、动量、转动、振动与流体。",
+    "unitCount": 8,
+    "lessonCount": 18
+  },
+  {
+    "id": "ap-physics-c",
+    "title": "AP Physics C",
+    "titleZh": "AP 物理 C",
+    "subject": "science",
+    "level": "AP",
+    "description": "The complete calculus-based AP Physics C course covering both exams: Mechanics (official Units 1–7) and Electricity & Magnetism (official Units 8–13), deriving results with derivatives, integrals, and differential equations.",
+    "descriptionZh": "完整的微积分基础 AP 物理 C 课程，覆盖两门考试：力学（官方第 1–7 单元）与电磁学（官方第 8–13 单元），全程用导数、积分和微分方程推导物理结论。",
+    "unitCount": 13,
+    "lessonCount": 21
+  },
+  {
+    "id": "english-9",
+    "title": "English 9",
+    "titleZh": "英语 9（九年级）",
+    "subject": "english",
+    "level": "Honors",
+    "description": "Introduction to literature: short fiction and literary elements, The Odyssey, Romeo and Juliet, To Kill a Mockingbird, plus grammar and essay-writing foundations.",
+    "descriptionZh": "文学入门：短篇小说与文学要素、《奥德赛》、《罗密欧与朱丽叶》、《杀死一只知更鸟》，以及语法与写作基础。",
+    "unitCount": 5,
+    "lessonCount": 12
+  },
+  {
+    "id": "english-10",
+    "title": "English 10",
+    "titleZh": "英语 10（十年级）",
+    "subject": "english",
+    "level": "Honors",
+    "description": "World literature: short fiction and poetry across cultures, Antigone, Night, Lord of the Flies, plus argumentative writing and research skills.",
+    "descriptionZh": "世界文学：跨文化的短篇小说与诗歌、《安提戈涅》、《夜》、《蝇王》，以及议论文写作与研究技能。",
+    "unitCount": 5,
+    "lessonCount": 10
+  },
+  {
+    "id": "english-11",
+    "title": "English 11",
+    "titleZh": "英语 11（十一年级）",
+    "subject": "english",
+    "level": "Honors",
+    "description": "American literature: Puritans to the Revolution, Transcendentalism, Realism and The Crucible, The Great Gatsby and Modernism, plus American rhetoric and the research paper.",
+    "descriptionZh": "美国文学：从清教徒到独立革命、超验主义、现实主义与《熔炉》、《了不起的盖茨比》与现代主义，以及美国演说修辞与研究论文。",
+    "unitCount": 5,
+    "lessonCount": 10
+  },
+  {
+    "id": "english-12",
+    "title": "English 12",
+    "titleZh": "英语 12（十二年级）",
+    "subject": "english",
+    "level": "Honors",
+    "description": "British literature: Beowulf and Chaucer, Macbeth and the sonnets, the Romantics and Frankenstein, Victorian to modern voices, plus college and career writing.",
+    "descriptionZh": "英国文学：《贝奥武甫》与乔叟、《麦克白》与十四行诗、浪漫主义与《弗兰肯斯坦》、维多利亚时代到现代，以及大学申请与职场写作。",
+    "unitCount": 5,
+    "lessonCount": 10
+  },
+  {
+    "id": "ap-chinese",
+    "title": "AP Chinese Language & Culture",
+    "titleZh": "AP 中文语言与文化",
+    "subject": "language",
+    "level": "AP",
+    "description": "A full AP Chinese course built around the six College Board themes, teaching practical vocabulary, core sentence patterns, and Chinese culture through examples, dialogues, and graded practice.",
+    "descriptionZh": "一门完整的 AP 中文课程，围绕美国大学理事会的六大主题，通过例句、对话和分级练习教授实用词汇、核心句型与中华文化。",
+    "unitCount": 6,
+    "lessonCount": 18
+  },
+  {
+    "id": "spanish-1-honors",
+    "title": "Spanish 1",
+    "titleZh": "西班牙语 1",
+    "subject": "language",
+    "level": "Honors",
+    "description": "A complete first-year Spanish course following the standard U.S. curriculum: pronunciation and greetings, core grammar, school life, family, food, free time, home and city, shopping and travel — with a first look at the preterite.",
+    "descriptionZh": "完整的第一年西班牙语课程，按照美国学校标准课程编排：发音与问候、核心语法、学校生活、家庭、食物、休闲活动、家与城市、购物与旅行，并初步接触过去时。",
+    "unitCount": 8,
+    "lessonCount": 17
+  },
+  {
+    "id": "ap-us-history",
+    "title": "AP U.S. History",
+    "titleZh": "AP 美国历史",
+    "subject": "history",
+    "level": "AP",
+    "description": "The complete AP U.S. History course following the official College Board nine-period framework, from pre-Columbian societies to the present, emphasizing the historical thinking skills tested on the APUSH exam.",
+    "descriptionZh": "完整的 AP 美国历史课程，按照 College Board 官方九个时期的框架编排，覆盖从哥伦布之前的原住民社会到当代，重点训练 APUSH 考试所考查的历史思维能力。",
+    "unitCount": 9,
+    "lessonCount": 26
+  },
+  {
+    "id": "ap-euro-history",
+    "title": "AP European History",
+    "titleZh": "AP 欧洲历史",
+    "subject": "history",
+    "level": "AP",
+    "description": "The complete AP European History course following the official College Board nine-unit framework, from the Renaissance to contemporary Europe (c. 1450–present), emphasizing the historical thinking skills tested on the AP exam.",
+    "descriptionZh": "完整的 AP 欧洲历史课程，按照 College Board 官方九个单元的框架编排，从文艺复兴到当代欧洲（约 1450 年至今），重点训练 AP 考试所考查的历史思维能力。",
+    "unitCount": 9,
+    "lessonCount": 19
+  },
+  {
+    "id": "ap-microeconomics",
+    "title": "AP Microeconomics",
+    "titleZh": "AP 微观经济学",
+    "subject": "history",
+    "level": "AP",
+    "description": "A complete AP Microeconomics course following the College Board six-unit framework, with bilingual instruction, graph-based reasoning, worked examples, and exam-style practice.",
+    "descriptionZh": "按照 College Board 官方六单元框架编写的完整 AP 微观经济学课程，包含双语讲解、图形推理、例题与考试型练习。",
+    "unitCount": 6,
+    "lessonCount": 19
+  },
+  {
+    "id": "ap-macroeconomics",
+    "title": "AP Macroeconomics",
+    "titleZh": "AP 宏观经济学",
+    "subject": "history",
+    "level": "AP",
+    "description": "A complete AP Macroeconomics course following the College Board six-unit framework. Every required concept is taught; exam weights are retained separately for assessment planning and diagnostic testing.",
+    "descriptionZh": "按照 College Board 官方六单元框架编写的完整 AP 宏观经济学课程。所有必学知识均完整教学；考试占比单独保留，用于组卷、复习规划与诊断测试。",
+    "unitCount": 6,
+    "lessonCount": 18
+  }
+]

@@ -16,7 +16,6 @@ function CourseCard({ course }) {
   const { courseProgress } = useAuth()
   const { lang, t } = useLang()
   const prog = courseProgress(course)
-  const lessonCount = course.units.reduce((n, u) => n + u.lessons.length, 0)
   const title = lang === 'zh' ? course.titleZh : course.title
   const sub = lang === 'zh' ? '' : (lang === 'both' ? course.titleZh : '')
 
@@ -28,7 +27,7 @@ function CourseCard({ course }) {
       </div>
       <p>{lang === 'zh' ? (course.descriptionZh || course.description) : course.description}</p>
       <div className="progress-label">
-        {course.units.length} {t('units')} · {lessonCount} {t('lessons')}
+        {course.unitCount} {t('units')} · {course.lessonCount} {t('lessons')}
         {prog.done > 0 && <> · {prog.pct}% {t('complete')}</>}
       </div>
       <div className="progress-bar"><div style={{ width: `${prog.pct}%` }} /></div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useParams, Navigate, useNavigate } from 'react-router-dom'
-import { getCourse } from '../data/index.js'
+import { useCourse } from '../data/useCourse.js'
 import { useAuth } from '../auth.jsx'
 import { useLang } from '../i18n.jsx'
 import { useNotes } from '../notes.jsx'
@@ -10,7 +10,7 @@ import Quiz from '../components/Quiz.jsx'
 export default function Lesson() {
   const { courseId, unitId, lessonId } = useParams()
   const navigate = useNavigate()
-  const course = getCourse(courseId)
+  const { course, loading } = useCourse(courseId)
   const { recordLesson, lessonState } = useAuth()
   const { lang, t } = useLang()
   const { openNotebook } = useNotes()
@@ -32,6 +32,9 @@ export default function Lesson() {
     return () => document.removeEventListener('selectionchange', onSelect)
   }, [])
 
+  if (loading) {
+    return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  }
   if (!course) return <Navigate to="/courses" replace />
   const unit = course.units.find(u => u.id === unitId)
   const lesson = unit?.lessons.find(l => l.id === lessonId)

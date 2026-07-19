@@ -1,53 +1,29 @@
-import secondaryMath1Honors from './courses/secondary-math-1-honors.js'
-import secondaryMath2Honors from './courses/secondary-math-2-honors.js'
-import apStatistics from './courses/ap-statistics.js'
-import algebra1 from './courses/algebra1.js'
-import geometry from './courses/geometry.js'
-import algebra2 from './courses/algebra2.js'
-import precalculus from './courses/precalculus.js'
-import apCalcAB from './courses/ap-calculus-ab.js'
-import apCalcBC from './courses/ap-calculus-bc.js'
-import physics from './courses/physics.js'
-import chemistry from './courses/chemistry.js'
-import biology from './courses/biology.js'
-import english9 from './courses/english-9.js'
-import english10 from './courses/english-10.js'
-import english11 from './courses/english-11.js'
-import english12 from './courses/english-12.js'
-import apChemistry from './courses/ap-chemistry.js'
-import apPhysics1 from './courses/ap-physics-1.js'
-import apPhysicsC from './courses/ap-physics-c.js'
-import apUsHistory from './courses/ap-us-history.js'
-import apEuroHistory from './courses/ap-euro-history.js'
-import apMicroeconomics from './courses/ap-microeconomics.js'
-import apChinese from './courses/ap-chinese.js'
-import spanish1Honors from './courses/spanish-1-honors.js'
+// Lightweight catalog metadata loads on first paint (see courses-meta.js).
+// Full course content (lessons + problems) is code-split: each course is a
+// separate chunk fetched on demand via getCourse(id), so the initial bundle
+// stays small no matter how many courses exist.
+import { coursesMeta } from './courses-meta.js'
 
-export const courses = [
-  secondaryMath1Honors,
-  secondaryMath2Honors,
-  algebra1,
-  geometry,
-  algebra2,
-  precalculus,
-  apCalcAB,
-  apCalcBC,
-  apStatistics,
-  physics,
-  chemistry,
-  biology,
-  apChemistry,
-  apPhysics1,
-  apPhysicsC,
-  english9,
-  english10,
-  english11,
-  english12,
-  apChinese,
-  spanish1Honors,
-  apUsHistory,
-  apEuroHistory,
-  apMicroeconomics,
-]
+export { coursesMeta }
 
-export const getCourse = (id) => courses.find(c => c.id === id)
+// The catalog pages (Courses, Landing) only need metadata — expose it as `courses`.
+export const courses = coursesMeta
+
+// Vite turns this glob into a map of lazy loaders, one dynamic import per file.
+const loaders = import.meta.glob('./courses/*.js')
+const cache = new Map()
+
+// Async: returns the full course object (with units/lessons/problems), or null.
+export async function getCourse(id) {
+  if (cache.has(id)) return cache.get(id)
+  const loader = loaders[`./courses/${id}.js`]
+  if (!loader) return null
+  const mod = await loader()
+  cache.set(id, mod.default)
+  return mod.default
+}
+
+// Sync: returns a full course only if it's already been loaded (else null).
+export function getCourseCached(id) {
+  return cache.get(id) || null
+}

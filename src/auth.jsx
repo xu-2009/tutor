@@ -132,7 +132,8 @@ export function AuthProvider({ children }) {
   )
 
   const courseProgress = useCallback((course) => {
-    const total = course.units.reduce((n, u) => n + u.lessons.length, 0)
+    // Works with both a full course (has units) and lightweight metadata (has lessonCount).
+    const total = course.lessonCount ?? course.units.reduce((n, u) => n + u.lessons.length, 0)
     const done = Object.values(progress[course.id] || {}).filter(x => x.done).length
     return { done, total, pct: total ? Math.round((done / total) * 100) : 0 }
   }, [progress])

@@ -34,6 +34,33 @@ const extendedUnits = [
   apUnit('fluids', 'Fluid Mechanics', '流体力学'),
 ]
 
+const balanceAnswerPositions = units => {
+  let nextAnswer = 0
+  const refsChoiceLetter = problem =>
+    /\b(choice|option|answer)\s*[A-D]\b|选项\s*[A-D]/.test(
+      (problem.explanation?.en || '') + ' ' + (problem.explanation?.zh || '')
+    )
+  return units.map(unit => ({
+    ...unit,
+    lessons: unit.lessons.map(lesson => ({
+      ...lesson,
+      problems: lesson.problems.map(problem => {
+        if (problem.type !== 'mc') return problem
+        // Skip problems whose explanation names a choice by letter — rotating the
+        // choices would make that reference point at the wrong option.
+        if (refsChoiceLetter(problem)) return problem
+        const target = nextAnswer++ % problem.choices.length
+        const offset = (problem.answer - target + problem.choices.length) % problem.choices.length
+        return {
+          ...problem,
+          choices: problem.choices.map((_, index) => problem.choices[(index + offset) % problem.choices.length]),
+          answer: target,
+        }
+      }),
+    })),
+  }))
+}
+
 export default {
   id: 'physics',
   title: 'Physics',
@@ -42,7 +69,7 @@ export default {
   level: 'Standard',
   description: 'A complete algebra-based U.S. high-school physics course covering laboratory skills, mechanics, fluids, thermal physics, waves, optics, electricity, magnetism, and modern physics.',
   descriptionZh: '完整的美国高中代数型普通物理课程，涵盖实验技能、力学、流体、热学、波、光学、电学、磁学与近代物理。',
-  units: [
+  units: balanceAnswerPositions([
     supplementalUnits[0],
     {
       id: 'kinematics',
@@ -734,5 +761,5 @@ export default {
     },
     ...extendedUnits,
     ...supplementalUnits.slice(1),
-  ],
+  ]),
 }

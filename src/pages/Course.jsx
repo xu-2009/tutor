@@ -1,16 +1,19 @@
 import { Link, useParams, Navigate } from 'react-router-dom'
-import { getCourse } from '../data/index.js'
+import { useCourse } from '../data/useCourse.js'
 import { useAuth } from '../auth.jsx'
 import { useLang } from '../i18n.jsx'
 import { useNotes } from '../notes.jsx'
 
 export default function Course() {
   const { courseId } = useParams()
-  const course = getCourse(courseId)
+  const { course, loading } = useCourse(courseId)
   const { lessonState, courseProgress } = useAuth()
   const { lang, t } = useLang()
   const { openNotebook } = useNotes()
 
+  if (loading) {
+    return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  }
   if (!course) return <Navigate to="/courses" replace />
   const prog = courseProgress(course)
 
