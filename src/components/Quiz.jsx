@@ -29,6 +29,7 @@ export default function Quiz({ problems, onComplete, savedScore }) {
   // answers[i] = choice index (mc) or string (input)
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [saveState, setSaveState] = useState('idle') // 'idle' | 'saving' | 'saved' | 'failed'
 
   const allAnswered = problems.every((p, i) =>
     p.type === 'mc' ? answers[i] !== undefined : (answers[i] ?? '').toString().trim() !== ''
@@ -36,13 +37,19 @@ export default function Quiz({ problems, onComplete, savedScore }) {
 
   const correctCount = problems.filter((p, i) => isCorrect(p, answers[i])).length
 
+  const saveScore = async () => {
+    setSaveState('saving')
+    const ok = await onComplete({ correct: correctCount, total: problems.length })
+    setSaveState(ok === false ? 'failed' : 'saved')
+  }
+
   const submit = () => {
     setSubmitted(true)
-    onComplete({ correct: correctCount, total: problems.length })
+    saveScore()
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
   }
 
-  const reset = () => { setAnswers({}); setSubmitted(false) }
+  const reset = () => { setAnswers({}); setSubmitted(false); setSaveState('idle') }
 
   return (
     <div className="quiz">
@@ -108,7 +115,14 @@ export default function Quiz({ problems, onComplete, savedScore }) {
         <div className="quiz-result">
           <div>{t('yourScore')}</div>
           <div className="big">{correctCount} / {problems.length}</div>
-          <div style={{ marginBottom: 10 }}>✅ {t('markDone')}</div>
+          {saveState === 'saving' && <div style={{ marginBottom: 10, color: 'var(--muted)' }}>{t('savingProgress')}</div>}
+          {saveState === 'saved' && <div style={{ marginBottom: 10 }}>✅ {t('markDone')}</div>}
+          {saveState === 'failed' && (
+            <div style={{ marginBottom: 10, color: 'var(--red)' }}>
+              ⚠️ {t('saveFailed')}{' '}
+              <button type="button" className="link-btn" onClick={saveScore}>{t('retrySave')}</button>
+            </div>
+          )}
           <button className="btn ghost small" onClick={reset}>{t('retry')}</button>
         </div>
       )}

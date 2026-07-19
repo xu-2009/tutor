@@ -23,11 +23,11 @@ export function NotesProvider({ children }) {
     if (!user) setIsOpen(false)
   }, [user])
 
+  // Key notes by the current username (Supabase login no longer writes sp_session).
   const persist = useCallback((next) => {
-    const name = localStorage.getItem('sp_session')
-    if (name) save(`sp_notes_${name}`, next)
+    if (user) save(`sp_notes_${user}`, next)
     return next
-  }, [])
+  }, [user])
 
   const addNote = useCallback((text, source = null) => {
     const t = text.trim()

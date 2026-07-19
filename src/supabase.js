@@ -5,8 +5,16 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!url || !anonKey) {
-  console.error('Supabase is not configured: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local, then restart the dev server.')
+export const supabaseConfigured = Boolean(url && anonKey)
+
+if (!supabaseConfigured) {
+  // Fail gracefully: the app still loads (no import-time crash), but auth/DB calls
+  // will error and be surfaced to the user. On deploy, set both VITE_SUPABASE_* env vars.
+  console.error('Supabase is not configured: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (in .env.local for dev, or the host\'s env vars for deploy).')
 }
 
-export const supabase = createClient(url, anonKey)
+// Use harmless placeholders when unconfigured so createClient does not throw at import time.
+export const supabase = createClient(
+  url || 'https://unconfigured.supabase.co',
+  anonKey || 'unconfigured-anon-key'
+)

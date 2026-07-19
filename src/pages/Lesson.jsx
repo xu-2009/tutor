@@ -90,6 +90,7 @@ export default function Lesson() {
           <Blocks blocks={lesson.content} />
 
           <Quiz
+            key={`${courseId}/${unitId}/${lessonId}`}
             problems={lesson.problems}
             savedScore={state?.score}
             onComplete={(score) => recordLesson(courseId, unitId, lessonId, score)}
