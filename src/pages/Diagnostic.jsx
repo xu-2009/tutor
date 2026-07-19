@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react'
-import { Link, useParams, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useParams, Navigate } from 'react-router-dom'
 import { useCourse } from '../data/useCourse.js'
+import { useBank } from '../data/loadBank.js'
 import { useLang, choiceText } from '../i18n.jsx'
 import { useAuth } from '../auth.jsx'
 import { MathText } from '../components/MathText.jsx'
 import { TrendChart } from '../components/TrendChart.jsx'
 
-// --- grading (mirrors Quiz.jsx) ---
 const norm = (s) => String(s).trim().toLowerCase().replace(/\s+/g, ' ')
 function isCorrect(problem, value) {
   if (value === undefined || value === null || value === '') return false
@@ -30,54 +30,75 @@ function BiLine({ obj }) {
 
 const pick = (obj, lang) => (lang === 'zh' ? (obj.titleZh || obj.title) : obj.title)
 
+// pick up to n random indices from an array of given length
+function sample(len, n) {
+  const idx = Array.from({ length: len }, (_, i) => i)
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[idx[i], idx[j]] = [idx[j], idx[i]]
+  }
+  return idx.slice(0, n)
+}
+
 export default function Diagnostic() {
   const { courseId, scope } = useParams()
-  const navigate = useNavigate()
   const { course, loading, error } = useCourse(courseId)
+  const { bank, loading: bankLoading } = useBank(courseId)
   const { lang, t } = useLang()
   const { recordDiagnostic, diagnosticHistory } = useAuth()
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [seed, setSeed] = useState(0) // bump to draw a fresh set of questions
 
-  // Exam = the first 2 problems of every lesson, each carrying its lesson binding.
-  // Sourcing from the lesson's own problems guarantees questions can never drift
-  // away from the lesson they diagnose.
+  // Titles resolved separately from the question pick, so switching language never
+  // reshuffles the exam (which would wipe answers).
+  const titles = useMemo(() => {
+    const uT = {}, lT = {}
+    if (course) course.units.forEach(u => {
+      uT[u.id] = pick(u, lang)
+      u.lessons.forEach(l => { lT[`${u.id}/${l.id}`] = pick(l, lang) })
+    })
+    return { uT, lT }
+  }, [course, lang])
+
+  // Exam = 2 questions per lesson. Prefer the lesson's generated bank (random draw);
+  // fall back to the lesson's own problems when no bank exists. Never depends on lang.
   const items = useMemo(() => {
-    if (!course) return []
+    if (!course || bankLoading) return []
     const arr = []
     course.units.forEach(u => {
-      if (scope && scope !== 'all' && u.id !== scope) return // unit-scoped diagnostic
+      if (scope && scope !== 'all' && u.id !== scope) return
       u.lessons.forEach(l => {
-        l.problems.slice(0, 2).forEach((p, i) => {
-          arr.push({
-            key: `${u.id}::${l.id}::${i}`,
-            unitId: u.id, unitTitle: pick(u, lang),
-            lessonId: l.id, lessonTitle: pick(l, lang),
-            problem: p,
-          })
+        const key = `${u.id}/${l.id}`
+        const pool = (bank && bank[key] && bank[key].length) ? bank[key] : l.problems
+        sample(pool.length, 2).forEach((pi, slot) => {
+          arr.push({ key: `${u.id}::${l.id}::${slot}`, unitId: u.id, lessonId: l.id, problem: pool[pi] })
         })
       })
     })
     return arr
-  }, [course, lang, scope])
+  }, [course, bank, bankLoading, scope, seed])
 
   const report = useMemo(() => {
     const byLesson = new Map()
     for (const it of items) {
-      const k = `${it.unitId}::${it.lessonId}`
-      if (!byLesson.has(k)) byLesson.set(k, { ...it, total: 0, correct: 0 })
+      const k = `${it.unitId}/${it.lessonId}`
+      if (!byLesson.has(k)) byLesson.set(k, { unitId: it.unitId, lessonId: it.lessonId, total: 0, correct: 0 })
       const r = byLesson.get(k)
       r.total++
       if (isCorrect(it.problem, answers[it.key])) r.correct++
     }
     const lessons = [...byLesson.values()]
-    const strong = lessons.filter(l => l.correct === l.total)
-    const weak = lessons.filter(l => l.correct < l.total)
-    const totalCorrect = lessons.reduce((n, l) => n + l.correct, 0)
-    return { lessons, strong, weak, totalCorrect, totalQuestions: items.length }
+    return {
+      lessons,
+      strong: lessons.filter(l => l.correct === l.total),
+      weak: lessons.filter(l => l.correct < l.total),
+      totalCorrect: lessons.reduce((n, l) => n + l.correct, 0),
+      totalQuestions: items.length,
+    }
   }, [items, answers])
 
-  if (loading) return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
+  if (loading || bankLoading) return <div className="container" style={{ textAlign: 'center', padding: '70px 24px', color: 'var(--muted)' }}>…</div>
   if (error) {
     return (
       <div className="container" style={{ textAlign: 'center', padding: '70px 24px' }}>
@@ -90,7 +111,7 @@ export default function Diagnostic() {
 
   const courseTitle = pick(course, lang)
 
-  // Step 1: no scope chosen yet -> show the scope picker (whole course or a unit).
+  // Step 1: no scope chosen -> scope picker.
   if (!scope) {
     const opts = [
       { id: 'all', title: t('diagnosticScopeAll'), lessons: course.units.reduce((n, u) => n + u.lessons.length, 0) },
@@ -123,32 +144,32 @@ export default function Diagnostic() {
     )
   }
 
-  const scopeTitle = scope === 'all' ? courseTitle : (course.units.find(u => u.id === scope)?.[lang === 'zh' ? 'titleZh' : 'title'] || courseTitle)
+  const scopeTitle = scope === 'all' ? courseTitle : (titles.uT[scope] || courseTitle)
   const answeredCount = items.filter(it => answers[it.key] !== undefined && answers[it.key] !== '').length
+
   const submit = () => {
-    // Persist per-lesson mastery so the course list can mark skippable / focus lessons.
     const results = {}
     report.lessons.forEach(l => { results[`${l.unitId}/${l.lessonId}`] = l.correct === l.total ? 'mastered' : 'weak' })
     recordDiagnostic(courseId, scope, results, { correct: report.totalCorrect, total: report.totalQuestions })
     setSubmitted(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  const retake = () => { setAnswers({}); setSubmitted(false); window.scrollTo({ top: 0 }) }
+  const retake = () => { setAnswers({}); setSubmitted(false); setSeed(s => s + 1); window.scrollTo({ top: 0 }) }
 
-  // group items by unit for display
+  // group items by unit -> lesson for display
   const groups = []
   for (const it of items) {
     let g = groups.find(x => x.unitId === it.unitId)
-    if (!g) { g = { unitId: it.unitId, unitTitle: it.unitTitle, lessons: [] }; groups.push(g) }
+    if (!g) { g = { unitId: it.unitId, lessons: [] }; groups.push(g) }
     let ls = g.lessons.find(x => x.lessonId === it.lessonId)
-    if (!ls) { ls = { lessonId: it.lessonId, lessonTitle: it.lessonTitle, items: [] }; g.lessons.push(ls) }
+    if (!ls) { ls = { lessonId: it.lessonId, items: [] }; g.lessons.push(ls) }
     ls.items.push(it)
   }
 
   return (
     <div className="container">
       <div className="page-head">
-        <p><Link to={`/course/${courseId}`} style={{ color: 'var(--accent)' }}>← {t('backToCourse')}</Link></p>
+        <p><Link to={`/course/${courseId}/diagnostic`} style={{ color: 'var(--accent)' }}>← {t('backToCourse')}</Link></p>
         <h1>🔍 {t('diagnostic')}<span style={{ color: 'var(--muted)', fontWeight: 500, fontSize: '1rem' }}> · {scopeTitle}</span></h1>
         <p>{t('diagnosticIntro')}</p>
       </div>
@@ -185,7 +206,7 @@ export default function Diagnostic() {
               report.weak.map(l => (
                 <Link key={l.lessonId} className="diag-lesson" to={`/course/${courseId}/${l.unitId}/${l.lessonId}`}>
                   <span className="diag-x">{l.correct}/{l.total}</span>
-                  <span>{l.unitTitle} · {l.lessonTitle}</span>
+                  <span>{titles.uT[l.unitId]} · {titles.lT[`${l.unitId}/${l.lessonId}`]}</span>
                   <span className="diag-go">{t('diagnosticStudy')} →</span>
                 </Link>
               ))
@@ -200,7 +221,7 @@ export default function Diagnostic() {
               report.strong.map(l => (
                 <div key={l.lessonId} className="diag-lesson done">
                   <span className="diag-check">✓</span>
-                  <span>{l.unitTitle} · {l.lessonTitle}</span>
+                  <span>{titles.uT[l.unitId]} · {titles.lT[`${l.unitId}/${l.lessonId}`]}</span>
                   <span className="diag-skip">{t('diagnosticCanSkip')}</span>
                 </div>
               ))
@@ -218,10 +239,10 @@ export default function Diagnostic() {
         <>
           {groups.map(g => (
             <div className="diag-unit" key={g.unitId}>
-              <h2 className="diag-unit-title">{g.unitTitle}</h2>
+              <h2 className="diag-unit-title">{titles.uT[g.unitId]}</h2>
               {g.lessons.map(ls => (
                 <div className="diag-lesson-group" key={ls.lessonId}>
-                  <div className="diag-lesson-label">{ls.lessonTitle}</div>
+                  <div className="diag-lesson-label">{titles.lT[`${g.unitId}/${ls.lessonId}`]}</div>
                   {ls.items.map(it => {
                     const p = it.problem
                     const val = answers[it.key]
