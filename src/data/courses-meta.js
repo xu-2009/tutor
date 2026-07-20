@@ -297,5 +297,16 @@ export const coursesMeta = [
     "descriptionZh": "一门完整的 AP Spanish 语言与文化课程，围绕美国大学理事会的六大主题，通过例句、对话和分级练习教授高级词汇、语法（含过去时、将来/条件式与虚拟式）以及相关文化。",
     "unitCount": 6,
     "lessonCount": 18
+  },
+  {
+    "id": "ap-human-geography",
+    "title": "AP Human Geography",
+    "titleZh": "AP 人文地理",
+    "subject": "history",
+    "level": "AP",
+    "description": "The complete AP Human Geography course following the official College Board seven-unit framework: geographic thinking and data, population and migration, cultural patterns, political organization of space, agriculture and rural land use, cities and urban land use, and industrial and economic development.",
+    "descriptionZh": "完整的 AP 人文地理课程，按照 College Board 官方七个单元的框架编排：地理思维与数据、人口与迁移、文化格局、空间的政治组织、农业与乡村土地利用、城市与城市土地利用，以及工业与经济发展。",
+    "unitCount": 7,
+    "lessonCount": 20
   }
 ]
