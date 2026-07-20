@@ -330,5 +330,16 @@ export const coursesMeta = [
     "descriptionZh": "完整的 AP 心理学课程，按照 College Board 现行五个单元的框架编排：行为的生物学基础、认知、发展与学习、社会心理学与人格，以及心理与身体健康——并贯穿 AP 心理学考试所考查的研究方法与科学探究能力。",
     "unitCount": 5,
     "lessonCount": 19
+  },
+  {
+    "id": "psychology-honors",
+    "title": "Honors Psychology",
+    "titleZh": "荣誉心理学",
+    "subject": "history",
+    "level": "Honors",
+    "description": "A full-year honors high-school psychology course following the sequence U.S. teachers actually teach, aligned to the APA National Standards for High School Psychology: history and approaches, research methods and statistics, the biological bases of behavior, sensation and perception, consciousness, learning, memory, cognition, motivation and emotion, development, personality, social psychology, health, and psychological disorders and their treatment.",
+    "descriptionZh": "一门完整学年的荣誉级高中心理学课程，按照美国老师实际的教学顺序编排，对齐 APA《高中心理学课程国家标准》：心理学的历史与取向、研究方法与统计、行为的生物学基础、感觉与知觉、意识、学习、记忆、认知、动机与情绪、发展、人格、社会心理学、健康，以及心理障碍及其治疗。",
+    "unitCount": 15,
+    "lessonCount": 29
   }
 ]
