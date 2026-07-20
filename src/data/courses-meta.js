@@ -319,5 +319,16 @@ export const coursesMeta = [
     "descriptionZh": "完整的 AP 生物课程，按照 College Board 官方八个单元的框架编排：生命的化学、细胞的结构与功能、细胞能量学、细胞通讯与细胞周期、遗传、基因表达与调控、自然选择以及生态学——重点训练 AP 生物考试所考查的科学探究方法与定量推理能力。",
     "unitCount": 8,
     "lessonCount": 22
+  },
+  {
+    "id": "ap-psychology",
+    "title": "AP Psychology",
+    "titleZh": "AP 心理学",
+    "subject": "history",
+    "level": "AP",
+    "description": "The complete AP Psychology course following College Board's current five-unit framework: the biological bases of behavior, cognition, development and learning, social psychology and personality, and mental and physical health — with the research methods and science practices woven throughout, as tested on the AP Psychology exam.",
+    "descriptionZh": "完整的 AP 心理学课程，按照 College Board 现行五个单元的框架编排：行为的生物学基础、认知、发展与学习、社会心理学与人格，以及心理与身体健康——并贯穿 AP 心理学考试所考查的研究方法与科学探究能力。",
+    "unitCount": 5,
+    "lessonCount": 19
   }
 ]
