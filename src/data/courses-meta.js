@@ -308,5 +308,16 @@ export const coursesMeta = [
     "descriptionZh": "完整的 AP 人文地理课程，按照 College Board 官方七个单元的框架编排：地理思维与数据、人口与迁移、文化格局、空间的政治组织、农业与乡村土地利用、城市与城市土地利用，以及工业与经济发展。",
     "unitCount": 7,
     "lessonCount": 20
+  },
+  {
+    "id": "ap-biology",
+    "title": "AP Biology",
+    "titleZh": "AP 生物",
+    "subject": "science",
+    "level": "AP",
+    "description": "The complete AP Biology course following the official College Board eight-unit framework: the chemistry of life, cell structure and function, cellular energetics, cell communication and the cell cycle, heredity, gene expression and regulation, natural selection, and ecology — emphasizing the science practices and quantitative reasoning tested on the AP Biology exam.",
+    "descriptionZh": "完整的 AP 生物课程，按照 College Board 官方八个单元的框架编排：生命的化学、细胞的结构与功能、细胞能量学、细胞通讯与细胞周期、遗传、基因表达与调控、自然选择以及生态学——重点训练 AP 生物考试所考查的科学探究方法与定量推理能力。",
+    "unitCount": 8,
+    "lessonCount": 22
   }
 ]
