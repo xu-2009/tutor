@@ -24,6 +24,17 @@ export const coursesMeta = [
     "lessonCount": 20
   },
   {
+    "id": "secondary-math-3-honors",
+    "title": "Secondary Math III Honors",
+    "titleZh": "中学数学三（荣誉）",
+    "subject": "math",
+    "level": "Honors",
+    "description": "Utah's honors third-year integrated mathematics course, following the Utah Core Standards: composing and inverting functions; polynomial functions, equations, and the Fundamental Theorem of Algebra; rational and radical functions; logarithms; trigonometric functions, graphs, and identities for modeling periodic behavior; modeling with geometry; and statistical inference — algebra, geometry, trigonometry, and statistics woven together to prepare for calculus.",
+    "descriptionZh": "犹他州荣誉级第三年整合数学课程，遵循犹他州核心标准（Utah Core Standards）：函数的复合与反函数；多项式函数、方程与代数基本定理；有理函数与根式函数；对数；用于建模周期现象的三角函数、图象与恒等式；用几何建模；以及统计推断——将代数、几何、三角与统计融会贯通，为微积分做准备。",
+    "unitCount": 10,
+    "lessonCount": 20
+  },
+  {
     "id": "algebra1",
     "title": "Algebra 1",
     "titleZh": "代数一",
